@@ -1,0 +1,21 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+env/
+.env
+
+# Pengujian Files (Gak perlu diupload ke server production)
+Sampel_File_Uji_Skripsi/
+*.mp4
+*.pdf
+*.jpg
+*.png
+
+# Script Testing
+test_crypto.py
+dummy_generator.py
+generate_12_files.py

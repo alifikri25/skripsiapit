@@ -1,0 +1,4 @@
+streamlit==1.55.0
+pandas==2.3.3
+pycryptodome==3.23.0
+RC6Encryption==1.0.1
