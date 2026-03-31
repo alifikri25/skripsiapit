@@ -50,21 +50,38 @@ if st.sidebar.button("Reset Seluruh History Pengujian (Mulai Awal)"):
     st.session_state.current_page = "Beranda"
     st.rerun()
 
+# Profil Mahasiswa
+st.sidebar.markdown(
+    """
+    <div style="background-color: #e8f5e9; padding: 15px; border-radius: 10px; margin-top: 20px; text-align: center; border: 1px solid #c8e6c9;">
+        <p style="margin: 0; font-size: 13px; color: #2e7d32;"><b>Dikembangkan oleh:</b></p>
+        <p style="margin: 0; font-size: 16px; font-weight: bold; color: #1b5e20;">Hafidz Maulana Rahman</p>
+        <p style="margin: 0; font-size: 14px; color: #2e7d32;">NPM: 202210715069</p>
+    </div>
+    """, unsafe_allow_html=True
+)
+
 # --- Page Routing ---
 page = st.session_state.current_page
 
 if page == "Beranda":
     # Sesuai Sketsa 1 Area Kanan
-    st.title("Perbandingan Kinerja Algoritma")
-    st.header("Advanced Encryption Standard (AES)")
-    st.header("Rivest Cipher 6 (RC6)")
+    st.markdown(
+        """
+        <div style="background: linear-gradient(135deg, #0ba360 0%, #3cba92 100%); padding: 35px; border-radius: 15px; text-align: center; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <h1 style="color: white; margin-bottom: 10px; font-size: 34px;">Perbandingan Kinerja Algoritma</h1>
+            <h3 style="color: #e8f5e9; margin: 5px 0; font-weight: 500;">Advanced Encryption Standard (AES)</h3>
+            <h4 style="color: white; margin: 10px 0; opacity: 0.8;">— VERSUS —</h4>
+            <h3 style="color: #e8f5e9; margin: 5px 0; font-weight: 500;">Rivest Cipher 6 (RC6)</h3>
+        </div>
+        """, unsafe_allow_html=True
+    )
     
-    st.markdown("---")
-    st.write("Aplikasi pengujian performa algoritma kriptografi. Anda dapat beralih ke halaman **Menu** (lewat bilah di pinggir kiri) untuk berpindah ke area eksekusi uji materi pengolahan file.")
+    st.write("Aplikasi pengujian performa algoritma kriptografi. Anda dapat beralih ke halaman **Menu** untuk berpindah ke area eksekusi uji materi pengolahan file.")
 
 elif page == "Menu":
-    st.title("Pilihan Ruang Uji")
-    st.write("Silakan pilih mode pengujian yang ingin Anda lakukan secara spesifik saat ini:")
+    st.markdown("<h1 style='text-align: center; color: #333;'>Pilihan Ruang Uji</h1><hr>", unsafe_allow_html=True)
+    st.write("<p style='text-align: center;'>Silakan pilih mode pengujian yang ingin Anda lakukan secara spesifik saat ini:</p>", unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
     
     col1, col_space, col2 = st.columns([4, 1, 4])
@@ -97,8 +114,14 @@ elif page == "Menu":
 
 elif page == "  - Enkripsi":
     # Sesuai Sketsa 2
-    st.title("Proses Enkripsi Tunggal")
-    st.markdown("Unggah **1 (Tunggal)** file asli untuk simulasi enkripsi. Anda harus mengujinya satu-satu untuk mendapatkan data ukuran dan rekap jejak performa web pada Tabel Akhir.")
+    st.markdown(
+        """
+        <div style="background-color: #ffebee; padding: 20px; border-radius: 10px; text-align: center; border-bottom: 4px solid #ef5350; margin-bottom: 20px;">
+            <h1 style="color: #c62828; margin: 0;">Proses Enkripsi</h1>
+        </div>
+        """, unsafe_allow_html=True
+    )
+    st.markdown("<p style='text-align: center;'>Unggah <b>1 (Satu)</b> file asli untuk simulasi enkripsi. Anda harus mengujinya satu-satu untuk mendapatkan data ukuran dan rekap jejak performa web pada Tabel Akhir.</p>", unsafe_allow_html=True)
     
     # 1. Dropfile
     uploaded_file = st.file_uploader("Upload File Asli", accept_multiple_files=False)
@@ -154,15 +177,23 @@ elif page == "  - Enkripsi":
                 
                 # Show Table Layout untuk individu file ini
                 st.write("Tabel Hasil Individual Saat Ini:")
-                st.dataframe(pd.DataFrame([record]))
+                df_single = pd.DataFrame([record])
+                df_single.index = [1]
+                st.dataframe(df_single)
                 
             except Exception as e:
                 st.error(f"Terjadi kesalahan parah saat enkripsi: {e}")
 
 elif page == "  - Dekripsi":
     # Sesuai Sketsa Dekripsi
-    st.title("Proses Dekripsi Tunggal")
-    st.markdown("Unggah **1 (Tunggal)** file *Sandi/Ciphertext* hasil download dari pengujian Anda sebelumnya untuk dikembalikan menjadi file dokumen utuh. Kunci harus 100% kongruen (identik).")
+    st.markdown(
+        """
+        <div style="background-color: #e3f2fd; padding: 20px; border-radius: 10px; text-align: center; border-bottom: 4px solid #42a5f5; margin-bottom: 20px;">
+            <h1 style="color: #1565c0; margin: 0;">Proses Dekripsi</h1>
+        </div>
+        """, unsafe_allow_html=True
+    )
+    st.markdown("<p style='text-align: center;'>Unggah <b>1 (Satu)</b> file <i>Sandi/Ciphertext</i> hasil download dari pengujian Anda sebelumnya untuk dikembalikan menjadi file dokumen utuh. Kunci harus 100% kongruen (identik).</p>", unsafe_allow_html=True)
     
     # 1. Dropfile (Khusus Hasil)
     uploaded_file = st.file_uploader("Upload File Teks Sandi (Hasil dari Enkripsi)", accept_multiple_files=False)
@@ -222,14 +253,22 @@ elif page == "  - Dekripsi":
                     )
                     
                     st.write("Tabel Hasil Individual Saat Ini:")
-                    st.dataframe(pd.DataFrame([record]))
+                    df_single = pd.DataFrame([record])
+                    df_single.index = [1]
+                    st.dataframe(df_single)
                 else:
                     st.error("Gagal Dekripsi! Proses ditolak. Menelaah blok palsu. Kesalahan ini biasanya bersumber dari ketidaksesuaian 'KUNCI' atau algoritma dekriptornya berlainan spesies.")
             except Exception as e:
                 st.error(f"Gagal Total Dekripsi! Kunci pasti salah, algoritma tertukar/salah sandar, atau Anda memakai file rusak. Error Log System: {e}")
 
 elif page == "Tabel Akhir":
-    st.title("Tabel Akhir (Master Rekapitulasi)")
+    st.markdown(
+        """
+        <div style="background-color: #f3e5f5; padding: 20px; border-radius: 10px; text-align: center; border-bottom: 4px solid #ab47bc; margin-bottom: 20px;">
+            <h1 style="color: #6a1b9a; margin: 0;">Tabel Akhir Proses Kriptografi</h1>
+        </div>
+        """, unsafe_allow_html=True
+    )
     
     # Syarat mutlak: minimal telah mencetak skor 1 x di arena Enkrips dan Dekripsi
     has_enc_data = len(st.session_state.enc_history) > 0
@@ -242,16 +281,19 @@ elif page == "Tabel Akhir":
         
         # Sedot memori dataframes (Akumulasi List Global Array)
         df_enc = pd.DataFrame(st.session_state.enc_history)
+        if not df_enc.empty: df_enc.index = range(1, len(df_enc) + 1)
+        
         df_dec = pd.DataFrame(st.session_state.dec_history)
+        if not df_dec.empty: df_dec.index = range(1, len(df_dec) + 1)
         
         st.markdown("---")
-        st.header("Rekapitulasi Konsistensi Kecepatan: Proses **ENKRIPSI**")
+        st.markdown("<h3 style='text-align: center; color: #c62828;'>Tabel Enkripsi</h3>", unsafe_allow_html=True)
         st.dataframe(df_enc, use_container_width=True)
         csv_enc = df_enc.to_csv(index=False).encode('utf-8')
         st.download_button("Ekstrak Laporan Semua Tabel Enkripsi (CSV)", data=csv_enc, file_name="Master_Tabel_Akhir_Enkripsi.csv", mime="text/csv")
         
         st.markdown("---")
-        st.header("Rekapitulasi Konsistensi Kecepatan: Proses **DEKRIPSI**")
+        st.markdown("<h3 style='text-align: center; color: #1565c0;'>Tabel Dekripsi</h3>", unsafe_allow_html=True)
         st.dataframe(df_dec, use_container_width=True)
         csv_dec = df_dec.to_csv(index=False).encode('utf-8')
         st.download_button("Ekstrak Laporan Semua Tabel Dekripsi (CSV)", data=csv_dec, file_name="Master_Tabel_Akhir_Dekripsi.csv", mime="text/csv")
