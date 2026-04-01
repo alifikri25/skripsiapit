@@ -21,7 +21,7 @@ st.markdown("""
         color: white !important;
     }
     [data-testid="stSidebar"] hr { border-color: rgba(255,255,255,0.2) !important; }
-    [data-testid="stSidebar"] button { color: white !important; border-color: rgba(255,255,255,0.3) !important; }
+    [data-testid="stSidebar"] button { border-color: rgba(255,255,255,0.3) !important; }
     .main .block-container {
         background: rgba(255,255,255,0.88);
         border-radius: 20px;
