@@ -6,6 +6,33 @@ from crypto_utils import aes_encrypt, aes_decrypt, rc6_encrypt, rc6_decrypt
 
 st.set_page_config(page_title="Sistem Uji Kriptografi", layout="wide")
 
+# --- Global CSS: Warna & Background ---
+st.markdown("""
+    <style>
+    .stApp {
+        background: linear-gradient(135deg, #e8eaf6 0%, #ede7f6 50%, #e3f2fd 100%);
+    }
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #1565c0 0%, #0d47a1 50%, #1a237e 100%) !important;
+    }
+    [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3,
+    [data-testid="stSidebar"] label, [data-testid="stSidebar"] span,
+    [data-testid="stSidebar"] p, [data-testid="stSidebar"] div {
+        color: white !important;
+    }
+    [data-testid="stSidebar"] hr { border-color: rgba(255,255,255,0.2) !important; }
+    [data-testid="stSidebar"] button { color: white !important; border-color: rgba(255,255,255,0.3) !important; }
+    .main .block-container {
+        background: rgba(255,255,255,0.88);
+        border-radius: 20px;
+        padding: 2rem 3rem;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+        margin-top: 1rem;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 # --- Initialize Global Session State ---
 if 'current_page' not in st.session_state:
     st.session_state.current_page = "Beranda"
@@ -31,10 +58,15 @@ st.sidebar.title("Kriptografi")
 nav_options = ["Beranda", "Menu", "  - Enkripsi", "  - Dekripsi", "Tabel Akhir"]
 current_index = nav_options.index(st.session_state.current_page) if st.session_state.current_page in nav_options else 0
 
+def format_nav(opt):
+    icons = {"Beranda": "🏠 Beranda", "Menu": "📋 Menu", "  - Enkripsi": "  🔐 Enkripsi", "  - Dekripsi": "  🔓 Dekripsi", "Tabel Akhir": "📊 Tabel Akhir"}
+    return icons.get(opt, opt)
+
 page_selection = st.sidebar.radio(
     "Navigasi Utama", 
     nav_options,
-    index=current_index
+    index=current_index,
+    format_func=format_nav
 )
 
 # Jika diklik di sidebar, sync dengan session state
@@ -53,10 +85,10 @@ if st.sidebar.button("Reset Seluruh History Pengujian (Mulai Awal)"):
 # Profil Mahasiswa
 st.sidebar.markdown(
     """
-    <div style="background-color: #e8f5e9; padding: 15px; border-radius: 10px; margin-top: 20px; text-align: center; border: 1px solid #c8e6c9;">
-        <p style="margin: 0; font-size: 13px; color: #2e7d32;"><b>Dikembangkan oleh:</b></p>
-        <p style="margin: 0; font-size: 16px; font-weight: bold; color: #1b5e20;">Hafidz Maulana Rahman</p>
-        <p style="margin: 0; font-size: 14px; color: #2e7d32;">NPM: 202210715069</p>
+    <div style="background: rgba(255,255,255,0.15); padding: 15px; border-radius: 10px; margin-top: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.25);">
+        <p style="margin: 0; font-size: 13px; color: rgba(255,255,255,0.8);"><b>Dikembangkan oleh:</b></p>
+        <p style="margin: 0; font-size: 16px; font-weight: bold; color: #ffffff;">Hafidz Maulana Rahman</p>
+        <p style="margin: 0; font-size: 14px; color: rgba(255,255,255,0.8);">NPM: 202210715069</p>
     </div>
     """, unsafe_allow_html=True
 )
@@ -65,62 +97,47 @@ st.sidebar.markdown(
 page = st.session_state.current_page
 
 if page == "Beranda":
-    # Sesuai Sketsa 1 Area Kanan
     st.markdown(
         """
-        <div style="background: linear-gradient(135deg, #0ba360 0%, #3cba92 100%); padding: 35px; border-radius: 15px; text-align: center; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-            <h1 style="color: white; margin-bottom: 10px; font-size: 34px;">Perbandingan Kinerja Algoritma</h1>
-            <h3 style="color: #e8f5e9; margin: 5px 0; font-weight: 500;">Advanced Encryption Standard (AES)</h3>
-            <h4 style="color: white; margin: 10px 0; opacity: 0.8;">— VERSUS —</h4>
-            <h3 style="color: #e8f5e9; margin: 5px 0; font-weight: 500;">Rivest Cipher 6 (RC6)</h3>
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 50px 35px; border-radius: 20px; text-align: center; margin-bottom: 25px; box-shadow: 0 10px 40px rgba(102,126,234,0.4);">
+            <h1 style="color: white; margin-bottom: 15px; font-size: 30px; font-weight: 400; letter-spacing: 2px;">PERBANDINGAN KINERJA ALGORITMA</h1>
+            <p style="color: rgba(255,255,255,0.9); margin: 8px 0; font-size: 20px; font-weight: 300;">Advanced Encryption Standard (AES)</p>
+            <p style="color: rgba(255,255,255,0.9); margin: 8px 0; font-size: 20px; font-weight: 300;">Rivest Cipher 6 (RC6)</p>
+            <p style="color: rgba(255,255,255,0.7); margin-top: 15px; font-size: 18px; font-weight: 300;">128-bit</p>
         </div>
         """, unsafe_allow_html=True
     )
-    
     st.write("Aplikasi pengujian performa algoritma kriptografi. Anda dapat beralih ke halaman **Menu** untuk berpindah ke area eksekusi uji materi pengolahan file.")
 
 elif page == "Menu":
     st.markdown("<h1 style='text-align: center; color: #333;'>Pilihan Ruang Uji</h1><hr>", unsafe_allow_html=True)
-    st.write("<p style='text-align: center;'>Silakan pilih mode pengujian yang ingin Anda lakukan secara spesifik saat ini:</p>", unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
-    
     col1, col_space, col2 = st.columns([4, 1, 4])
-    
     with col1:
-        st.markdown(
-            """
-            <div style='border: 2px solid #555; padding: 60px; text-align: center; border-radius: 10px; background-color: #f9f9f9;'>
-                <h1 style='color: #333;'>ENKRIPSI</h1>
-            </div>
-            <br>
-            """, unsafe_allow_html=True
-        )
+        st.markdown("""
+            <div style='background: linear-gradient(135deg, #7c4dff 0%, #b388ff 100%); padding: 60px 30px; text-align: center; border-radius: 15px; box-shadow: 0 10px 30px rgba(124,77,255,0.3);'>
+                <h1 style='color: white; margin: 0;'>🔐 Enkripsi</h1>
+                <p style='color: rgba(255,255,255,0.8); margin-top: 10px;'>AES & RC6</p>
+            </div><br>""", unsafe_allow_html=True)
         if st.button("Masuk Halaman Enkripsi", use_container_width=True, type="primary"):
             go_to_page("  - Enkripsi")
             st.rerun()
-
     with col2:
-        st.markdown(
-            """
-            <div style='border: 2px solid #555; padding: 60px; text-align: center; border-radius: 10px; background-color: #f9f9f9;'>
-                <h1 style='color: #333;'>DEKRIPSI</h1>
-            </div>
-            <br>
-            """, unsafe_allow_html=True
-        )
+        st.markdown("""
+            <div style='background: linear-gradient(135deg, #7c4dff 0%, #b388ff 100%); padding: 60px 30px; text-align: center; border-radius: 15px; box-shadow: 0 10px 30px rgba(124,77,255,0.3);'>
+                <h1 style='color: white; margin: 0;'>🔓 Dekripsi</h1>
+                <p style='color: rgba(255,255,255,0.8); margin-top: 10px;'>AES & RC6</p>
+            </div><br>""", unsafe_allow_html=True)
         if st.button("Masuk Halaman Dekripsi", use_container_width=True, type="primary"):
             go_to_page("  - Dekripsi")
             st.rerun()
 
 elif page == "  - Enkripsi":
     # Sesuai Sketsa 2
-    st.markdown(
-        """
-        <div style="background-color: #ffebee; padding: 20px; border-radius: 10px; text-align: center; border-bottom: 4px solid #ef5350; margin-bottom: 20px;">
-            <h1 style="color: #c62828; margin: 0;">Proses Enkripsi</h1>
-        </div>
-        """, unsafe_allow_html=True
-    )
+    st.markdown("""
+        <div style="background: linear-gradient(135deg, #1e88e5 0%, #5e35b1 100%); padding: 25px; border-radius: 15px; text-align: center; margin-bottom: 20px; box-shadow: 0 8px 25px rgba(94,53,177,0.3);">
+            <h1 style="color: white; margin: 0;">🔐 Proses Enkripsi</h1>
+        </div>""", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center;'>Unggah <b>1 (Satu)</b> file asli untuk simulasi enkripsi. Anda harus mengujinya satu-satu untuk mendapatkan data ukuran dan rekap jejak performa web pada Tabel Akhir.</p>", unsafe_allow_html=True)
     
     # 1. Dropfile
@@ -186,14 +203,11 @@ elif page == "  - Enkripsi":
 
 elif page == "  - Dekripsi":
     # Sesuai Sketsa Dekripsi
-    st.markdown(
-        """
-        <div style="background-color: #e3f2fd; padding: 20px; border-radius: 10px; text-align: center; border-bottom: 4px solid #42a5f5; margin-bottom: 20px;">
-            <h1 style="color: #1565c0; margin: 0;">Proses Dekripsi</h1>
-        </div>
-        """, unsafe_allow_html=True
-    )
-    st.markdown("<p style='text-align: center;'>Unggah <b>1 (Satu)</b> file <i>Sandi/Ciphertext</i> hasil download dari pengujian Anda sebelumnya untuk dikembalikan menjadi file dokumen utuh. Kunci harus 100% kongruen (identik).</p>", unsafe_allow_html=True)
+    st.markdown("""
+        <div style="background: linear-gradient(135deg, #00897b 0%, #1565c0 100%); padding: 25px; border-radius: 15px; text-align: center; margin-bottom: 20px; box-shadow: 0 8px 25px rgba(21,101,192,0.3);">
+            <h1 style="color: white; margin: 0;">🔓 Proses Dekripsi</h1>
+        </div>""", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center;'>Unggah <b>1 (Satu)</b> file <i>Sandi/Ciphertext</i> hasil download dari pengujian Anda sebelumnya untuk dikembalikan menjadi file dokumen utuh.</p>", unsafe_allow_html=True)
     
     # 1. Dropfile (Khusus Hasil)
     uploaded_file = st.file_uploader("Upload File Teks Sandi (Hasil dari Enkripsi)", accept_multiple_files=False)
@@ -262,13 +276,10 @@ elif page == "  - Dekripsi":
                 st.error(f"Gagal Total Dekripsi! Kunci pasti salah, algoritma tertukar/salah sandar, atau Anda memakai file rusak. Error Log System: {e}")
 
 elif page == "Tabel Akhir":
-    st.markdown(
-        """
-        <div style="background-color: #f3e5f5; padding: 20px; border-radius: 10px; text-align: center; border-bottom: 4px solid #ab47bc; margin-bottom: 20px;">
-            <h1 style="color: #6a1b9a; margin: 0;">Tabel Akhir Proses Kriptografi</h1>
-        </div>
-        """, unsafe_allow_html=True
-    )
+    st.markdown("""
+        <div style="background: linear-gradient(135deg, #7b1fa2 0%, #4a148c 100%); padding: 25px; border-radius: 15px; text-align: center; margin-bottom: 20px; box-shadow: 0 8px 25px rgba(123,31,162,0.3);">
+            <h1 style="color: white; margin: 0;">📊 Tabel Akhir Proses Kriptografi</h1>
+        </div>""", unsafe_allow_html=True)
     
     # Syarat mutlak: minimal telah mencetak skor 1 x di arena Enkrips dan Dekripsi
     has_enc_data = len(st.session_state.enc_history) > 0
