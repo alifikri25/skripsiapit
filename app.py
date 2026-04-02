@@ -33,6 +33,9 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# --- Kunci Tetap (Sandi Utama) ---
+MASTER_KEY = "Kriptografi@2024"
+
 # --- Initialize Global Session State ---
 if 'current_page' not in st.session_state:
     st.session_state.current_page = "Beranda"
@@ -157,6 +160,9 @@ elif page == "  - Enkripsi":
         if len(key_input) != 16:
             st.error(f"Kunci yang dimasukkan memiliki {len(key_input)} karakter. Wajib mutlak 16 karakter!")
             st.stop()
+        if key_input != MASTER_KEY:
+            st.error("Kunci salah! Sandi yang Anda masukkan tidak cocok. Akses ditolak.")
+            st.stop()
             
         with st.spinner("Sistem memproses komputasi algoritma..."):
             file_bytes = uploaded_file.read()
@@ -225,6 +231,9 @@ elif page == "  - Dekripsi":
             st.stop()
         if len(key_input) != 16:
             st.error(f"Kunci uji Anda {len(key_input)} karakter. Ia wajib persis 16 karakter!")
+            st.stop()
+        if key_input != MASTER_KEY:
+            st.error("Kunci salah! Sandi yang Anda masukkan tidak cocok. Akses ditolak.")
             st.stop()
             
         with st.spinner("Mesin berusaha merobohkan dan memulihkan sandi komputasi..."):
