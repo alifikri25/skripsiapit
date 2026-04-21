@@ -143,8 +143,8 @@ elif page == "  - Enkripsi":
         </div>""", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center;'>Unggah <b>1 (Satu)</b> file asli untuk simulasi enkripsi. Anda harus mengujinya satu-satu untuk mendapatkan data ukuran dan rekap jejak performa web pada Tabel Akhir.</p>", unsafe_allow_html=True)
     
-    # 1. Dropfile
-    uploaded_file = st.file_uploader("Upload File Asli", accept_multiple_files=False)
+    # 1. Dropfile (Dibatasi 4 format ujian: pdf, png, jpg, mp4)
+    uploaded_file = st.file_uploader("Upload File Asli", accept_multiple_files=False, type=['pdf', 'png', 'jpg', 'mp4'])
     
     # 2. Choose Algorithm
     algo = st.selectbox("Pilih Algoritma", ["Advanced Encryption Standard (AES)", "Rivest Cipher 6 (RC6)"])
@@ -215,8 +215,8 @@ elif page == "  - Dekripsi":
         </div>""", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center;'>Unggah <b>1 (Satu)</b> file <i>Sandi/Ciphertext</i> hasil download dari pengujian Anda sebelumnya untuk dikembalikan menjadi file dokumen utuh.</p>", unsafe_allow_html=True)
     
-    # 1. Dropfile (Khusus Hasil)
-    uploaded_file = st.file_uploader("Upload File Teks Sandi (Hasil dari Enkripsi)", accept_multiple_files=False)
+    # 1. Dropfile (Khusus Hasil, Dibatasi hanya ekstensi terkait)
+    uploaded_file = st.file_uploader("Upload File Teks Sandi (Hasil dari Enkripsi)", accept_multiple_files=False, type=['pdf', 'png', 'jpg', 'mp4'])
     
     # 2. Choose Algorithm
     algo = st.selectbox("Pilih Algoritma Rekonstruksi", ["Advanced Encryption Standard (AES)", "Rivest Cipher 6 (RC6)"])
@@ -301,19 +301,29 @@ elif page == "Tabel Akhir":
         
         # Sedot memori dataframes (Akumulasi List Global Array)
         df_enc = pd.DataFrame(st.session_state.enc_history)
-        if not df_enc.empty: df_enc.index = range(1, len(df_enc) + 1)
-        
         df_dec = pd.DataFrame(st.session_state.dec_history)
-        if not df_dec.empty: df_dec.index = range(1, len(df_dec) + 1)
         
         st.markdown("---")
-        st.markdown("<h3 style='text-align: center; color: #c62828;'>Tabel Enkripsi</h3>", unsafe_allow_html=True)
-        st.dataframe(df_enc, use_container_width=True)
-        csv_enc = df_enc.to_csv(index=False).encode('utf-8')
-        st.download_button("Ekstrak Laporan Semua Tabel Enkripsi (CSV)", data=csv_enc, file_name="Master_Tabel_Akhir_Enkripsi.csv", mime="text/csv")
+        st.markdown("<h3 style='text-align: center; color: #c62828;'>Kumpulan Tabel Enkripsi (Per Kelompok Jenis File)</h3>", unsafe_allow_html=True)
+        if not df_enc.empty:
+            # Grouping berdasarkan Jenis File
+            for jenis, group in df_enc.groupby("Jenis File"):
+                group = group.copy()
+                group.index = range(1, len(group) + 1)
+                st.markdown(f"<h5 style='color: #4a148c; margin-top: 15px;'>Tabel Uji Enkripsi - File {jenis.upper()}</h5>", unsafe_allow_html=True)
+                st.dataframe(group, use_container_width=True)
+            
+            csv_enc = df_enc.to_csv(index=False).encode('utf-8')
+            st.download_button("Ekstrak Laporan Semua Tabel Enkripsi (CSV)", data=csv_enc, file_name="Master_Tabel_Akhir_Enkripsi.csv", mime="text/csv")
         
         st.markdown("---")
-        st.markdown("<h3 style='text-align: center; color: #1565c0;'>Tabel Dekripsi</h3>", unsafe_allow_html=True)
-        st.dataframe(df_dec, use_container_width=True)
-        csv_dec = df_dec.to_csv(index=False).encode('utf-8')
-        st.download_button("Ekstrak Laporan Semua Tabel Dekripsi (CSV)", data=csv_dec, file_name="Master_Tabel_Akhir_Dekripsi.csv", mime="text/csv")
+        st.markdown("<h3 style='text-align: center; color: #1565c0;'>Kumpulan Tabel Dekripsi (Per Kelompok Jenis File)</h3>", unsafe_allow_html=True)
+        if not df_dec.empty:
+            for jenis, group in df_dec.groupby("Jenis File"):
+                group = group.copy()
+                group.index = range(1, len(group) + 1)
+                st.markdown(f"<h5 style='color: #1a237e; margin-top: 15px;'>Tabel Uji Dekripsi - File {jenis.upper()}</h5>", unsafe_allow_html=True)
+                st.dataframe(group, use_container_width=True)
+                
+            csv_dec = df_dec.to_csv(index=False).encode('utf-8')
+            st.download_button("Ekstrak Laporan Semua Tabel Dekripsi (CSV)", data=csv_dec, file_name="Master_Tabel_Akhir_Dekripsi.csv", mime="text/csv")
