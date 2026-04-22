@@ -143,8 +143,8 @@ elif page == "  - Enkripsi":
         </div>""", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center;'>Unggah <b>1 (Satu)</b> file asli untuk simulasi enkripsi. Anda harus mengujinya satu-satu untuk mendapatkan data ukuran dan rekap jejak performa web pada Tabel Akhir.</p>", unsafe_allow_html=True)
     
-    # 1. Dropfile (Dibatasi 4 format ujian: pdf, png, jpg, mp4)
-    uploaded_file = st.file_uploader("Upload File Asli", accept_multiple_files=False, type=['pdf', 'png', 'jpg', 'mp4'])
+    # 1. Dropfile (Dibatasi 4 format ujian: jpeg/jpg, png, mp3, mp4)
+    uploaded_file = st.file_uploader("Upload File Asli", accept_multiple_files=False, type=['jpeg', 'jpg', 'png', 'mp3', 'mp4'])
     
     # 2. Choose Algorithm
     algo = st.selectbox("Pilih Algoritma", ["Advanced Encryption Standard (AES)", "Rivest Cipher 6 (RC6)"])
@@ -215,8 +215,8 @@ elif page == "  - Dekripsi":
         </div>""", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center;'>Unggah <b>1 (Satu)</b> file <i>Sandi/Ciphertext</i> hasil download dari pengujian Anda sebelumnya untuk dikembalikan menjadi file dokumen utuh.</p>", unsafe_allow_html=True)
     
-    # 1. Dropfile (Khusus Hasil, Dibatasi hanya ekstensi terkait)
-    uploaded_file = st.file_uploader("Upload File Teks Sandi (Hasil dari Enkripsi)", accept_multiple_files=False, type=['pdf', 'png', 'jpg', 'mp4'])
+    # 1. Dropfile (Khusus Hasil, Dibatasi hanya ekstensi terkait: jpeg/jpg, png, mp3, mp4)
+    uploaded_file = st.file_uploader("Upload File Teks Sandi (Hasil dari Enkripsi)", accept_multiple_files=False, type=['jpeg', 'jpg', 'png', 'mp3', 'mp4'])
     
     # 2. Choose Algorithm
     algo = st.selectbox("Pilih Algoritma Rekonstruksi", ["Advanced Encryption Standard (AES)", "Rivest Cipher 6 (RC6)"])
